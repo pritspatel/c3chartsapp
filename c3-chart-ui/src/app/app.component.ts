@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import c3 from 'c3';
 import {DataService} from './data.service';
 import {HttpClient} from '@angular/common/http';
@@ -8,26 +8,29 @@ import {HttpClient} from '@angular/common/http';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements  AfterViewInit{
+
 
   title = 'app';
-  lineChartData: any;
+  lineChartData={};
 
   constructor(private dataService: DataService) {
-    console.log('constructor called')
+    console.log('constructor called');
     this.lineChartData = dataService.getLineChartData();
+    console.log('constructor call completed')
     console.log(this.lineChartData);
 
 
   }
-
-  ngOnInit(): void {
-    console.log('onInitCalled....')
-    console.log( this.lineChartData);
+  ngAfterViewInit(): void {
     const chart = c3.generate({
       bindto: '#lineChart',
-      data: {}
+      data: {
+        json : this.lineChartData
+      }
     });
-    chart.load(this.lineChartData);
+
   }
+
+
 }
